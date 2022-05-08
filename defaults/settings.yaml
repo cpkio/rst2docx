@@ -1,0 +1,8 @@
+from: rst
+to: docx
+reference-doc: c:\users\user\appdata\roaming\pandoc\templates\my_template.docx
+highlight-style: monochrome
+table-of-contents: true
+
+filters:
+- rst2docx\my_filter.lua
