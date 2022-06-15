@@ -415,6 +415,27 @@ putRole = (element) ->
       return idfunc pandoc.Span(el, roleAttr)
     when 'key'
       roleAttr = pandoc.Attr("",{  },{{ "custom-style", "Клавиша" }})
+      merge = (t1, t2) ->
+        for item in *t2 do table.insert(t1, item)
+      transform = (char,sep) ->
+        ret = {}
+        s = string.find(el, char, 1, true)
+        merge(ret, wrapAngleBrackets pandoc.Span(string.sub(el, 1, s - 1), roleAttr))
+        while s
+          table.insert(ret, pandoc.Str sep)
+          s0 = s + 1
+          s = string.find(el, char, s0, true)
+          if s
+            merge(ret, wrapAngleBrackets pandoc.Span(string.sub(el, s0, s - 1), roleAttr))
+          else
+            merge(ret, wrapAngleBrackets pandoc.Span(string.sub(el, s0), roleAttr))
+        return ret
+      plus = string.find(el, '+', 1, true)
+      hyphen = string.find(el, '-', 1, true)
+      if plus
+        return transform('+', '+')
+      elseif hyphen
+        return transform('-', '+')
       return wrapAngleBrackets pandoc.Span(el, roleAttr)
     when 'menu'
       roleAttr = pandoc.Attr("",{  },{{ "custom-style", "Меню" }})

@@ -444,6 +444,37 @@ putRole = function(element)
         "Клавиша"
       }
     })
+    local merge
+    merge = function(t1, t2)
+      for _index_0 = 1, #t2 do
+        local item = t2[_index_0]
+        table.insert(t1, item)
+      end
+    end
+    local transform
+    transform = function(char, sep)
+      local ret = { }
+      local s = string.find(el, char, 1, true)
+      merge(ret, wrapAngleBrackets(pandoc.Span(string.sub(el, 1, s - 1), roleAttr)))
+      while s do
+        table.insert(ret, pandoc.Str(sep))
+        local s0 = s + 1
+        s = string.find(el, char, s0, true)
+        if s then
+          merge(ret, wrapAngleBrackets(pandoc.Span(string.sub(el, s0, s - 1), roleAttr)))
+        else
+          merge(ret, wrapAngleBrackets(pandoc.Span(string.sub(el, s0), roleAttr)))
+        end
+      end
+      return ret
+    end
+    local plus = string.find(el, '+', 1, true)
+    local hyphen = string.find(el, '-', 1, true)
+    if plus then
+      return transform('+', '+')
+    elseif hyphen then
+      return transform('-', '+')
+    end
     return wrapAngleBrackets(pandoc.Span(el, roleAttr))
   elseif 'menu' == _exp_0 then
     local roleAttr = pandoc.Attr("", { }, {
