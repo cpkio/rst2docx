@@ -1,3 +1,4 @@
+-- only compatible with pandoc v2.14
 if _G.FORMAT != 'json'
   print [[
 MINI FILTER HELP
@@ -655,7 +656,7 @@ walkTable = (element) ->
     if el.tag == 'Para' or el.tag == 'Plain'
       return pandoc.Div (pandoc.Para el.content),tableRowAttr
     return el
-  pandoc.walk_block element.bodies[1],{ Para: walkPara, Plain: walkPara }
+  pandoc.walk_block element,{ Para: walkPara, Plain: walkPara }
   return {
     cap
     element

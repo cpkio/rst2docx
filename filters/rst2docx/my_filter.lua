@@ -875,7 +875,7 @@ walkTable = function(element)
     end
     return el
   end
-  pandoc.walk_block(element.bodies[1], {
+  pandoc.walk_block(element, {
     Para = walkPara,
     Plain = walkPara
   })
